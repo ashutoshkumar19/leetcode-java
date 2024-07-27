@@ -1,4 +1,4 @@
-package org.ashutosh.java.utils;
+package org.ashutosh.java.sort;
 
 import java.util.concurrent.RecursiveAction;
 

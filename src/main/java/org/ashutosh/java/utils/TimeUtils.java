@@ -1,6 +1,6 @@
 package org.ashutosh.java.utils;
 
-public class TimeUtil {
+public class TimeUtils {
 
     public static String formatTimeDiff(long startTime, long endTime) {
         long duration = endTime - startTime; // Duration in nanoseconds

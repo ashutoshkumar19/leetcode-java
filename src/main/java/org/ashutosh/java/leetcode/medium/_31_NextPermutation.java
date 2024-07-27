@@ -1,77 +1,61 @@
 package org.ashutosh.java.leetcode.medium;
 
-import org.ashutosh.java.utils.RandomGenerator;
-import org.ashutosh.java.utils.TimeUtil;
+import java.util.Arrays;
 
-public class _75_SortColors {
-    public static void main(String[] args) {
+public class _31_NextPermutation {
+	public static void main(String[] args) {
 //        int[] nums = new int[]{2, 0, 2, 1, 1, 0};
+//		int[] nums = new int[]{1, 2, 3};
+//		int[] nums = new int[]{3, 2, 1};
+//		int[] nums = new int[]{1, 1, 5};
+		int[] nums = new int[]{1, 1, 1, 1, 1, 2, 2, 1};
 
-        int[] nums = RandomGenerator.generateIntegerArray(10000, 0, 100);
+//		int[] nums = RandomGenerator.generateIntegerArray(100, 0, 100);
 
-        _75_SortColors object = new _75_SortColors();
-        object.sortColors(nums);
-    }
+		_31_NextPermutation obj = new _31_NextPermutation();
+		obj.nextPermutation(nums);
+	}
 
-    public void sortColors(int[] nums) {
-        System.out.println("Starting sortColors...");
-        //System.out.println("Before sorting: " + Arrays.toString(nums));
+	public void nextPermutation(int[] nums) {
+		int len = nums.length;
 
-        int[] nums2 = nums.clone();
+		/* Iterating from the last, find the break index where the value is lesser than the value at next index */
+		int break_index = -1;
+		for (int i = len - 1; i > 0; i--) {
+			if (nums[i] > nums[i - 1]) {
+				break_index = i - 1;
+				break;
+			}
+		}
 
-        // Brute force
-        long t1 = System.nanoTime();
-        for (int i = 0; i < nums.length - 1; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                int temp = nums[i];
-                if (nums[j] < nums[i]) {
-                    nums[i] = nums[j];
-                    nums[j] = temp;
-                }
-            }
-        }
-        long t2 = System.nanoTime();
-        System.out.println("Brute force time taken: " + TimeUtil.formatTimeDiff(t1, t2));
+		/* Swap the value at break index with immediate next greater value iterating from the end till break index */
+		if (break_index > -1) {
+			for (int i = len - 1; i > break_index; i--) {
+				if (nums[i] > nums[break_index]) {
+					swap(nums, break_index, i);
+					break;
+				}
+			}
+		}
 
-        // Quicksort
-        //ForkJoinPool pool = new ForkJoinPool();
-        long t3 = System.nanoTime();
-        quickSort(nums2, 0, nums.length - 1);
-        // pool.invoke(new QuickSortTask(nums, 0, nums.length - 1));
-        long t4 = System.nanoTime();
+		/* Reverse the array after the break index */
+		if (nums[len - 1] < nums[break_index + 1]) {
+			int start = break_index + 1;
+			for (int i = start; i <= ((start + len - 1) / 2); i++) {
+				if (nums[i] > nums[len - 1 - i + start]) {
+					swap(nums, i, len - 1 - i + start);
+				}
+			}
+		}
 
-        System.out.println("Quick sort time taken: " + TimeUtil.formatTimeDiff(t3, t4));
+		System.out.println(Arrays.toString(nums));
 
-        //System.out.println("After sorting: " + Arrays.toString(nums));
+	}
 
-    }
-
-    public void quickSort(int[] nums, int left, int right) {
-        if (left < right) {
-            int pivot = partition(nums, left, right);
-            quickSort(nums, left, pivot - 1);
-            quickSort(nums, pivot + 1, right);
-        }
-    }
-
-    public int partition(int[] nums, int left, int right) {
-        int pivot = nums[right];
-        int i = left - 1;
-        for (int j = left; j < right; j++) {
-            if (nums[j] <= pivot) {
-                i = i + 1;
-                swap(nums, i, j);
-            }
-        }
-        i = i + 1;
-        swap(nums, i, right);
-        return i;
-    }
-
-    public void swap(int[] nums, int a, int b) {
-        int temp = nums[a];
-        nums[a] = nums[b];
-        nums[b] = temp;
-    }
+	public void swap(int[] nums, int a, int b) {
+		int temp = nums[a];
+		nums[a] = nums[b];
+		nums[b] = temp;
+	}
 
 }
